@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Aportes</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-input type="number" [(ngModel)]="aporte.valor" placeholder="Valor"></ion-input>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="saveAporte()" expand="block">
+      Confirmar aporte
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

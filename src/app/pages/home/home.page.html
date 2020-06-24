@@ -1,0 +1,58 @@
+<ion-header > 
+  <ion-toolbar>
+    <ion-title>Aportes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list color="primary" *ngIf="aportes.length > 0">
+    Quantidade de aportes: <ion-label color="primary" slot="end" *ngIf="aportes.length">{{ aportes.length }}</ion-label>
+  </ion-list>
+
+  <ion-list lines= "full">
+    <ion-item-sliding *ngFor="let aporte of aportes">
+
+      <ion-item button [routerLink]="['/aporte', aporte.id]">
+        <h5><ion-label color="primary" slot="end"  *ngIf="aporte.createdAt">{{ aporte.createdAt| date: 'short'}} </ion-label>
+        <ion-label color="primary" slot="end"  *ngIf="aporte.valor">{{ aporte.valor | currency: 'BRL' }}</ion-label></h5>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="delAporte(aporte.id)">
+          <ion-icon slot="top" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+        
+    </ion-item-sliding>
+
+  </ion-list>
+  
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <ion-button (click)="logout()" color="danger" expand="block">
+            Sair
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="4">
+          <ion-button routerLink="/aporte" expand="block">
+            +
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="4">
+          <ion-button routerLink="/aporte" expand="block">
+            $
+          </ion-button>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

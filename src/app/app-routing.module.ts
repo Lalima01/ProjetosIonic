@@ -1,16 +1,14 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { LoggedGuard } from './guards/login.guard';
 
 const routes: Routes = [
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule), canActivate: [AuthGuard] },
+  { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule), canActivate: [LoggedGuard] },
+  { path: 'aporte', loadChildren: () => import('./pages/aporte/aporte.module').then(m => m.AportePageModule), canActivate: [AuthGuard] },
+  { path: 'aporte/:id', loadChildren: () => import('./pages/aporte/aporte.module').then(m => m.AportePageModule), canActivate: [AuthGuard] }
 ];
 
 @NgModule({
