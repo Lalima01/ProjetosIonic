@@ -2,6 +2,8 @@ import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { AporteService } from 'src/app/services/aporte.service';
 import { Aporte } from 'src/app/interfaces/aporte';
+import { Custo } from 'src/app/interfaces/custo';
+import { CustoService } from 'src/app/services/custo.service';
 import { Subscription } from 'rxjs';
 import { LoadingController, ToastController } from '@ionic/angular';
 
@@ -13,13 +15,19 @@ import { LoadingController, ToastController } from '@ionic/angular';
 export class HomePage implements OnInit {
   private loading: any;
   public aportes = new Array<Aporte>();
+  public custos = new Array<Custo>();
   private aportesSubscription: Subscription;
+  private custosSubscription: Subscription;
+  public vrTotalAporte;
 
   constructor(private aporteService: AporteService,
+              private custoService: CustoService,
               private loadingCtrl: LoadingController,
               private authService: AuthService,
               private toastCtrl: ToastController) {
     this.aportesSubscription = this.aporteService.getAportes().subscribe(data => { this.aportes = data; });
+    this.custosSubscription = this.custoService.getCustos().subscribe(data => { this.custos = data; });
+    this.vrTotalAporte = this.aporteService.getvalorTotalAporte();
   }
 
   ngOnInit() {
@@ -50,12 +58,7 @@ export class HomePage implements OnInit {
     toast.present();
   }
 
-  async delAporte(id: string) {
-    try {
-      console.log(id);
-      await this.aporteService.delAporte(id);
-    } catch (error) {
-      this.presentToast('Erro ao tentar deletar');
-    }
+  apresentaValor(vr: number) {
+    console.log(`to aqui`);
   }
 }

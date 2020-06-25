@@ -1,41 +1,40 @@
-import { Aporte } from './../../interfaces/aporte';
+import { Custo } from './../../interfaces/Custo';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AporteService } from 'src/app/services/aporte.service';
+import { CustoService } from 'src/app/services/custo.service';
 import { LoadingController, ToastController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-aporte',
-  templateUrl: './aporte.page.html',
-  styleUrls: ['./aporte.page.scss'],
+  selector: 'app-custo',
+  templateUrl: './Custo.page.html',
+  styleUrls: ['./Custo.page.scss'],
 })
-export class AportePage implements OnInit {
-  private aporteId: string = null;
+export class CustoPage implements OnInit {
+  private custoId: string = null;
     // para usar = {} todos os campos do Intarfes devem ser opcionais
-  public aporte: Aporte = {};
-  // aporteLists para listar todos os aportes cadastrados
-  public aporteLists = new Array<Aporte>();
+  public custo: Custo = {};
+  // CustoLists para listar todos os Custos cadastrados
+  public custoLists = new Array<Custo>();
   private loading: any;
-  private aporteSubscription: Subscription;
+  private custoSubscription: Subscription;
 
   constructor(
-    private aporteService: AporteService,
+    private custoService: CustoService,
     private activatedRoute: ActivatedRoute,
     private navCtrl: NavController,
     private loadingCtrl: LoadingController,
     private authService: AuthService,
     private toastCtrl: ToastController
   ) {
-    this.aporteService.inicializaValorTotal();
       // para carregar os dados a serem alterados
-    this.aporteId = this.activatedRoute.snapshot.params.id;
+    this.custoId = this.activatedRoute.snapshot.params.id;
 
-    if (this.aporteId) { this.loadAporte(); }
+    if (this.custoId) { this.loadCusto(); }
        // *
-  // para carregar os aportes cadastrados
-    this.aporteSubscription = this.aporteService.getAportes().subscribe(data => { this.aporteLists = data; });
+  // para carregar os Custos cadastrados
+    this.custoSubscription = this.custoService.getCustos().subscribe(data => { this.custoLists = data; });
   }
 
   ngOnInit() { }
@@ -43,26 +42,26 @@ export class AportePage implements OnInit {
   // so irá existir se tiver recuperado um registro do banco - listener (comunicação entre objetos) rodando em backuground
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnDestroy() {
-    if (this.aporteSubscription) { this.aporteSubscription.unsubscribe(); }
+    if (this.custoSubscription) { this.custoSubscription.unsubscribe(); }
   }
 
-  loadAporte() {
+  loadCusto() {
     // para carregar os dados a serem alterados
-    console.log('loadAporte()');
-    this.aporteSubscription = this.aporteService.getAporte(this.aporteId).subscribe(data => {
-      this.aporte = data;
+    console.log('loadCusto()');
+    this.custoSubscription = this.custoService.getCusto(this.custoId).subscribe(data => {
+      this.custo = data;
     });
   }
 
-  async saveAporte() {
+  async saveCusto() {
     await this.presentLoading();
 
-    this.aporte.userId = (await this.authService.getAuth().currentUser).uid;
+    this.custo.userId = (await this.authService.getAuth().currentUser).uid;
 
 
-    if (this.aporteId) {
+    if (this.custoId) {
       try {
-        await this.aporteService.updateAporte(this.aporteId, this.aporte);
+        await this.custoService.updateCusto(this.custoId, this.custo);
         await this.loading.dismiss();
 
         this.navCtrl.navigateBack('/home');
@@ -73,10 +72,10 @@ export class AportePage implements OnInit {
         this.loading.dismiss();
       }
     } else {
-      this.aporte.createdAt = new Date().getTime();
+      this.custo.createdAt = new Date().getTime();
 
       try {
-        await this.aporteService.addAporte(this.aporte);
+        await this.custoService.addCusto(this.custo);
         await this.loading.dismiss();
         // voltar para a página anterior
         this.navCtrl.navigateBack('/home');
@@ -96,10 +95,10 @@ export class AportePage implements OnInit {
     toast.present();
   }
 
-  async delAporte(id: string) {
+  async delCusto(id: string) {
     try {
       console.log(id);
-      await this.aporteService.delAporte(id);
+      await this.custoService.delCusto(id);
     } catch (error) {
       this.presentToast('Erro ao tentar deletar');
     }

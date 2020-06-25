@@ -14,6 +14,24 @@
     </ion-item>
   </ion-list>
 
+  <ion-list lines= "full">
+    <ion-item-sliding *ngFor="let aporte of aporteLists">
+
+      <ion-item button [routerLink]="['/aporte', aporte.id]">
+        <h5><ion-label color="primary" slot="end"  *ngIf="aporte.createdAt">{{ aporte.createdAt| date: 'short'}}</ion-label>
+        <ion-label color="primary" slot="end"  *ngIf="aporte.valor">{{ aporte.valor | currency: 'BRL' }}</ion-label></h5>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="delAporte(aporte.id)">
+          <ion-icon slot="top" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
 </ion-content>
 <ion-footer>
   <ion-toolbar>
